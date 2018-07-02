@@ -1,6 +1,7 @@
 'use strict'
 
 const CACHE_NAME = 'cache-v1';
+const RUNTIME = 'runtime';
 // The files we want to cache
 const resourceList = [
   '/',
@@ -35,24 +36,27 @@ const resourceList = [
 ];
 
 //This is the "Offline copy of pages" wervice worker
-//Define handler for the install event and skip the waiting
-self.addEventListener('install', function(event) {
-   return self.skipWaiting( );
+// The install handler takes care of precaching the resources we always need.
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(resourceList))
+      .then(self.skipWaiting())
+  );
 });
 //Cache list of predefined resources during activate event, using the cache API
 self.addEventListener('activate', function( event ){
+   const currentCaches = [CACHE_NAME, RUNTIME];
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then( function(cache) {
-        return cache.addAll(resourceList);
-      })  .then( function( ){
-        return self.clients.claim( );
-     }) 
-      .catch( function( e ){
-        console.log("Error handling cache", e);
-      })
+    caches.keys().then(cacheNames => {
+      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+    }).then(cachesToDelete => {
+      return Promise.all(cachesToDelete.map(cacheToDelete => {
+        return caches.delete(cacheToDelete);
+      }));
+    }).then(() => self.clients.claim())
   );
-  });
+});
 //If any fetch fails, it will look for the request in the cache and serve it from there first
 self.addEventListener('fetch', function(event) {
   var updateCache = function(request){
