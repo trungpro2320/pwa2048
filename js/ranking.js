@@ -1,0 +1,1 @@
+console.log(readFile('rank.txt'))
