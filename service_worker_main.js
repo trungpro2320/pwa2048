@@ -57,29 +57,27 @@ self.addEventListener('activate', function( event ){
     }).then(() => self.clients.claim())
   );
 });
-//If any fetch fails, it will look for the request in the cache and serve it from there first
-self.addEventListener('fetch', function(event) {
-  var updateCache = function(request){
-    return caches.open(CACHE_NAME).then(function (cache) {
-      return fetch(request).then(function (response) {
-        console.log('[PWA Builder] add page to offline'+response.url)
-        return cache.put(request, response);
-      });
-    });
-  };
-  event.waitUntil(updateCache(event.request));
-  event.respondWith(
-    fetch(event.request).catch(function(error) {
-      console.log( '[PWA Builder] Network request Failed. Serving content from cache: ' + error );
-      //Check to see if you have it in the cache
-      //Return response
-      //If not in the cache, then return error page
-      return caches.open(CACHE_NAME).then(function (cache) {
-        return cache.match(event.request).then(function (matching) {
-          var report =  !matching || matching.status == 404?Promise.reject('no-match'): matching;
-          return report
+// The fetch handler serves responses for same-origin resources from a cache.
+// If no response is found, it populates the runtime cache with the response
+// from the network before returning it to the page.
+self.addEventListener('fetch', event => {
+  // Skip cross-origin requests, like those for Google Analytics.
+  if (event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        return caches.open(RUNTIME).then(cache => {
+          return fetch(event.request).then(response => {
+            // Put a copy of the response in the runtime cache.
+            return cache.put(event.request, response.clone()).then(() => {
+              return response;
+            });
+          });
         });
-      });
-    })
-  );
-})
+      })
+    );
+  }
+});
