@@ -1,0 +1,16 @@
+{
+  "name": "PWA2048",
+  "short_name": "2048",
+  "theme_color": "#138e69",
+  "background_color": "#f8ea48",
+  "display": "browser",
+  "Scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "meta/apple-touch-icon.png",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}
