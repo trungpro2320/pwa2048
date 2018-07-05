@@ -1,1 +1,1 @@
-<?php header( 'Location: /2048-root' ) ;  ?>
+<?php header( 'Location: index.html' ) ;  ?>
