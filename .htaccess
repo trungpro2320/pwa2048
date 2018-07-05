@@ -1,4 +1,4 @@
 #force https 
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
-RewriteRule ^(subdirectory/.*)$ https://%{HTTP_HOST}%{REQUEST_URI}/$1 [R=301,L]
+RewriteRule ^(subdirectory/.*)$ https://%{HTTP_HOST}%{REQUEST_URI}/$1/$2 [R=301,L]
