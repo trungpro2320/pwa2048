@@ -1,4 +1,0 @@
-RewriteEngine on
-RewriteCond %{HTTPS} on
-RewriteCond %{REQUEST_URI} /2048-root      [NC]
-RewriteRule (.*) http://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
