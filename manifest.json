@@ -1,16 +1,14 @@
 {
-  "name": "PWA2048",
-  "short_name": "2048",
-  "theme_color": "#138e69",
-  "background_color": "#f8ea48",
-  "display": "browser",
-  "Scope": "/",
-  "start_url": "/",
-  "icons": [
-    {
-      "src": "meta/apple-touch-icon.png",
-      "type": "image/png"
-    }
-  ],
-  "splash_pages": null
+	"name": "PWA 2048",
+	"short_name": "PWA2048",
+	"icons": [
+		{
+			"src": "meta/apple-touch-icon.png",
+			"sizes": "192x192"
+		}
+	],
+	"theme_color": "#990000",
+	"background_color": "#CCDEA8",
+	"display": "fullscreen",
+	"start_url": "/"
 }
