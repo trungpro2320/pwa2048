@@ -4,8 +4,8 @@ const CACHE_NAME = 'cache-v1';
 // The files we want to cache
 const resourceList = [
   '/2048-root',
-  '/2048-rootindex.html',
-  '/2048-rootfavicon.ico',
+  '/2048-root/index.html',
+  '/2048-root/favicon.ico',
   '/2048-root/style/main.css',
   '/2048-root/style/fonts/clear-sans.css',
   '/2048-root/style/fonts/ClearSans-Bold-webfont.eot',
